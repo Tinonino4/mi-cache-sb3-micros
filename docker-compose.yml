@@ -1,0 +1,26 @@
+services:
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest  # You can specify a version if needed
+    environment:
+      # Set environment variables for DB connection (replace with your details)
+      DB_VENDOR: postgres
+      DB_HOST: postgres  # Name of the database service (see below)
+      DB_USERNAME: keycloak
+      DB_PASSWORD: keycloak_password
+      DB_SCHEMA: keycloak
+    ports:
+      - "8080:8080"  # Expose Keycloak on port 8080 of the host
+    volumes:
+      - keycloak_data:/opt/keycloak/data  # Persistent storage for Keycloak data
+    restart: unless-stopped  # Restart Keycloak automatically
+
+  postgres:
+    image: postgres:latest  # PostgreSQL database for Keycloak
+    environment:
+      POSTGRES_PASSWORD: postgres_password  # Set a password for the database
+    volumes:
+      - postgres_data:/var/lib/postgresql/data  # Persistent storage for database
+
+volumes:
+  keycloak_data:  # Volume for Keycloak data
+  postgres_data:  # Volume for PostgreSQL data
